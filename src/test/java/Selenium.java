@@ -1,3 +1,5 @@
+import java.util.Random;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -5,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import java.util.Random;
 
 public class Selenium {
     //Criar instancia do driver do chrome
@@ -15,15 +16,15 @@ public class Selenium {
     public static void setup(){
         //Setar as propriedades do chrome Driver
         System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
-        //Abrir browser e acessar a URL
+       // Abrir browser e acessar a URL
         driver.get("https://automacaocombatista.herokuapp.com");
         //Maximizando o Browser Windows
-        //driver.manage().window().maximize();
+       driver.manage().window().maximize();
 
-        driver.findElement(By.xpath("//a[text()='ComeÃ§ar AutomaÃ§Ã£o Web']")).click();
+      driver.findElement(By.xpath("//a[text()='ComeÃ§ar AutomaÃ§Ã£o Web']")).click();
         //Maximizando o Browser Mac/Linux
-        driver.manage().window().fullscreen();
-    }
+     //   driver.manage().window().fullscreen();
+  }
 
     @Test
     public void criarUsuario(){
