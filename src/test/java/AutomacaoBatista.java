@@ -1,9 +1,7 @@
-import java.util.Random;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,10 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SeleniumAula2 {
+public class AutomacaoBatista {
 	//Criar instancia do driver do Chrome.
 	private static WebDriver driver;
-	private WebDriverWait wait = new WebDriverWait(driver, 100);
+	private WebDriverWait wait = new WebDriverWait(driver, 10000);
 	
 	@BeforeAll
 	public static void setup() {
@@ -66,7 +64,7 @@ public class SeleniumAula2 {
 //	}
 //	
 	@Test
-	public void select() {
+	public void select() throws InterruptedException {
 		
 		driver.findElement(By.xpath("//a[text()='Busca de elementos']")).click();
 		WebElement link = driver.findElement(By.xpath("//a[text()='Dropdown e Select']"));
@@ -75,11 +73,35 @@ public class SeleniumAula2 {
 		driver.findElement(By.xpath("//label[text()='Desenho Favorito']/preceding-sibling::div[@class='select-wrapper']")).click();
 		driver.findElement(By.xpath("//span[text()='Naruto']")).click();
 		
-		//driver.findElement(By.xpath("//div[@class='select-wrapper' and descendant::span[text()='Ronaldo']]")).click();
-		//driver.findElement(By.xpath("//span[text()='Ronaldinho Gaucho']")).click();
-		//WebElement listaSelecao = driver.findElement(By.xpath("//select[@id='dropdown']"));
-		//Select listaDesenhoFavorito = new Select(listaSelecao);
-		//listaDesenhoFavorito.selectByIndex(1);
+		//Clica direto pelo javascript indiferente se a opção esteja na tela ou não,
+		//utilizado quando o click do Selenium é mais rápido que a atualização de tela
+		// e ele entende que o item ainda não está clicável.
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		
+		WebElement segundaLista = driver.findElement(By.xpath("//span[text()='Ronaldo']/ancestor::ul/preceding-sibling::input"));
+		js.executeScript("arguments[0].click;", segundaLista);
+		
+		WebElement itemSegundaLista = driver.findElement(By.xpath("//span[text()='Ronaldinho Gaucho']"));
+		js.executeScript("arguments[0].click()", itemSegundaLista);
+		
+		WebElement terceiraLista = driver.findElement(By.xpath("//span[text()='Brasil']/ancestor::ul/preceding-sibling::input"));
+		js.executeScript("arguments[0].click();", terceiraLista);
+		
+		WebElement itemTerceiraLista = driver.findElement(By.xpath("//span[text()='Inglaterra']"));
+		js.executeScript("arguments[0].click();", itemTerceiraLista);
+		
+		driver.findElement(By.xpath("//span[text()='Homem']/ancestor::ul/preceding-sibling::input")).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Homem']")));
+		driver.findElement(By.xpath("//span[text()='Homem']")).click();
+		
+		driver.findElement(By.xpath("//span[text()='Masculino']/ancestor::ul/preceding-sibling::input")).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Masculino']")));
+		driver.findElement(By.xpath("//span[text()='Masculino']")).click();
+		
+		
+		WebElement listaSelecao = driver.findElement(By.xpath("//select[@id='dropdown']"));
+		Select listaDesenhoFavorito = new Select(listaSelecao);
+		listaDesenhoFavorito.selectByIndex(3);
 		//listaDesenhoFavorito.selectByValue("2");
 		//listaDesenhoFavorito.selectByVisibleText("Firefox");
 	}
