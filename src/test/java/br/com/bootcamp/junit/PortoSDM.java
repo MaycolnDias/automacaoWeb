@@ -1,0 +1,48 @@
+package br.com.bootcamp.junit;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import junit.framework.TestCase;
+
+public class PortoSDM extends TestCase {
+
+	private static WebDriver driver;
+	private ArrayList<String> palavras = new ArrayList<String>();
+
+	@BeforeAll
+	public static void setup() {
+		System.setProperty("webdriver.chrome.driver", "chromeDriver/chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.get("http://www.google.com.br");
+		driver.manage().window().maximize();
+	}
+
+	@Test
+	public void carga() throws IOException {
+		FileReader matriculas = new FileReader("matriculas.txt");
+		Scanner buffRead = new Scanner(matriculas);
+		//String linha = buffRead.readLine();
+		while(buffRead.hasNext()) {
+			palavras.add(buffRead.next());
+		}
+		buffRead.close();
+		int count = 0;
+		Random random = new Random();
+		String palavra = palavras.get(random.nextInt(palavras.size()));
+		while (count <= palavras.size()) {
+			
+			driver.get("http://nt2689:8088/api-portosdm/rest/cargas/usuario/exec/" + palavra);
+			count ++;
+		}
+
+	}
+
+}
